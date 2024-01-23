@@ -1,0 +1,8 @@
+.env
+.idea
+.vscode
+package-lock.json
+node_modules
+config/server
+config/db
+uploads
