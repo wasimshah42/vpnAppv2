@@ -24,7 +24,14 @@ let routes = function () {
     //--//
     routes.route("/user-list").get(cmsController.filterByType);
     routes.route("/server-detail").get(cmsController.serverDetail);
-    
+    //-defaults setting-//
+    routes.route("/defaults").get(cmsController.defaults);
+    routes.route("/update-defaults").post(cmsController.updateDefault);
+    //-default_data setting-//
+    routes.route("/default-data").get(cmsController.defaultData);
+    routes.route("/update-default-data").post(cmsController.updateDefaultData);
+    //-
+
     return routes;
 };
 //--//

@@ -209,6 +209,90 @@ const serverDetail = async function (req, res, next) {
     catch (error) { return next(error); }
 };
 //--//
+const defaults = async function (req, res, next) {
+    try {
+        let type = req.body.type;
+        if(!type  || type == "" ) {req.statusMessage ="Defaults Type iis requiired"; return  next(404)  };
+        let condition = [];
+        let findQuery = { where: { type: type } };
+        //--//
+        findQuery.where[Op.and] = condition;
+        findQuery.order = [["id", "DESC"]];
+        //--//
+        let instance = new sequelize.db(sequelize.models.defaults);
+        let [data, err] = await instance.findOne(findQuery);
+        if (err) { return next(err); }
+        //--//
+        return next({ defaults: data, });
+    }
+    catch (error) { return next(error); }
+};
+const updateDefault = async function (req, res, next) {
+    try {
+        let type = req.body.type;
+        if (!type || type == "") { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.defaults);
+        let [defaults, defaultsErr] = await instance.findOne({ type: type });
+        if (defaultsErr) { return next(defaultsErr); }
+        if (!defaults || !defaults.id) { return next(404); }
+        //--//
+        delete req.body.id;
+        instance.model = defaults;
+        defaults = defaults.toJSON();
+        //--//
+        [defaults, defaultsErr] = await instance.update(req.body);
+        if (defaultsErr) { return next(defaultsErr); }
+        //--//
+        req.statusMessage = "Successfully updated";
+        return next({ default: defaults });
+    }
+    catch (error) { return [null, error]; }
+
+};
+//--//
+const defaultData = async function (req, res, next) {
+    try {
+        let type = req.body.type;
+        if(!type  || type == "" ) {req.statusMessage ="Defaults Type iis requiired"; return  next(404)  };
+        let condition = [];
+        let findQuery = { where: { type: type } };
+        //--//
+        findQuery.where[Op.and] = condition;
+        findQuery.order = [["id", "DESC"]];
+        //--//
+        let instance = new sequelize.db(sequelize.models.default_data);
+        let [data, err] = await instance.findOne(findQuery);
+        if (err) { return next(err); }
+        //--//
+        return next({ defaultData: data, });
+    }
+    catch (error) { return next(error); }
+};
+const updateDefaultData = async function (req, res, next) {
+    try {
+        let type = req.body.type;
+        if (!type || type == "") { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.default_data);
+        let [defaults, defaultsErr] = await instance.findOne({ type: type });
+        if (defaultsErr) { return next(defaultsErr); }
+        if (!defaults || !defaults.id) { return next(404); }
+        //--//
+        delete req.body.id;
+        instance.model = defaults;
+        defaults = defaults.toJSON();
+        //--//
+        [defaults, defaultsErr] = await instance.update(req.body);
+        if (defaultsErr) { return next(defaultsErr); }
+        //--//
+        req.statusMessage = "Successfully updated";
+        return next({ default: defaults });
+    }
+    catch (error) { return [null, error]; }
+
+};
+//--//
 module.exports = {
     login,
     addV2rayServer,
@@ -218,5 +302,9 @@ module.exports = {
     update,
     deleteAccount,
     filterByType,
-    serverDetail
+    serverDetail,
+    updateDefault,
+    defaults,
+    defaultData,
+    updateDefaultData
 };
