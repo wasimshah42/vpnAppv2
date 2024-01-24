@@ -22,6 +22,9 @@ let routes = function () {
     routes.route("/update").post(cmsController.update);
     routes.route("/delete").post(cmsController.deleteAccount);
     //--//
+    routes.route("/user-list").get(cmsController.filterByType);
+    routes.route("/server-detail").get(cmsController.serverDetail);
+    
     return routes;
 };
 //--//

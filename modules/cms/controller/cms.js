@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const { Op ,literal } = require("sequelize");
+const { Op, literal } = require("sequelize");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const config = require("../../../config/db");
@@ -19,8 +19,8 @@ const login = async function (req, res, next) {
         let adminInstance = new sequelize.db(models.admin);
         let [admin, a_error] = await adminInstance.findOne(where);
         //------validate password---------//
-        if (admin) { 
-            var token = jwt.sign({id: admin.id}, config.secret, {
+        if (admin) {
+            var token = jwt.sign({ id: admin.id }, config.secret, {
                 expiresIn: 86400 // 24 hours
             });
             let whereAuth = {
@@ -29,13 +29,13 @@ const login = async function (req, res, next) {
             let authkeyInstance = new sequelize.db(models.auth_keys);
             let [authkey, a_error] = await authkeyInstance.findOne(whereAuth);
 
-            if(authkey === null){
+            if (authkey === null) {
                 var Authkey = new models.auth_keys({});
                 Authkey.admin_id = admin.id;
                 Authkey.token = token;
                 await Authkey.save();
             }
-            else if(authkey !== null){
+            else if (authkey !== null) {
                 authkey.token = token;
                 await authkey.save();
             }
@@ -45,7 +45,7 @@ const login = async function (req, res, next) {
             }
             return next(loginData);
         }
-        else{
+        else {
             return next(401);
         }
     }
@@ -56,7 +56,7 @@ const addV2rayServer = async function (req, res, next) {
         let v2rayServersDetailsInstance = new sequelize.db(models.v2rayServersDetails);
         let user_id = req.user_id;
         let platform = req.body.platform;
-        if(req.body.platform){
+        if (req.body.platform) {
             platform = platform;
         } else {
             platform = 'all';
@@ -91,17 +91,15 @@ const serverList = async function (req, res, next) {
         }
         let serverInstanceR = new sequelize.db(models.v2rayServersDetails);
         let [serversR, Rerror] = await serverInstanceR.findAll(findQueryR);
-        return next(serversR); 
+        return next(serversR);
     }
     catch (error) { return next(error); }
 };
-
 //--//
-
-const findAll = async function(req, res, next){
-    try{
+const findAll = async function (req, res, next) {
+    try {
         let condition = [];
-        let findQuery = {where: { deletedAt : null }};
+        let findQuery = { where: { deletedAt: null } };
         //--//
         findQuery.where[Op.and] = condition;
         let pagination = new Pagination(req, findQuery);
@@ -109,12 +107,12 @@ const findAll = async function(req, res, next){
         //--//
         let instance = new sequelize.db(sequelize.models.users);
         let [data, err] = await instance.findAndCountAll(findQuery);
-        if(err){ return next(err); }
+        if (err) { return next(err); }
         //--//
         pagination.setCount(data.count);
-        return next({users: data.rows, pagination: pagination});
+        return next({ users: data.rows, pagination: pagination });
     }
-    catch(error){ return next(error); }
+    catch (error) { return next(error); }
 };
 const update = async function (req, res, next) {
     try {
@@ -138,7 +136,7 @@ const update = async function (req, res, next) {
         return next({ user: user });
     }
     catch (error) { return [null, error]; }
-    
+
 };
 const deleteAccount = async function (req, res, next) {
     try {
@@ -157,6 +155,59 @@ const deleteAccount = async function (req, res, next) {
     }
     catch (error) { return [null, error]; }
 };
+const filterByType = async function (req, res, next) {
+    try {
+        let user_type = req.query.user_type
+        if (!user_type || user_type == "") { req.statusMessage = "User type is required."; return next(404) };
+        let condition = [];
+        let findQuery = { where: { deletedAt: null, user_type: user_type } };
+        //--//
+        findQuery.where[Op.and] = condition;
+        let pagination = new Pagination(req, findQuery);
+        findQuery.order = [["id", "DESC"]];
+        //--//
+        let instance = new sequelize.db(sequelize.models.users);
+        let [data, err] = await instance.findAndCountAll(findQuery);
+        if (err) { return next(err); }
+        //--//
+        pagination.setCount(data.count);
+        return next({ users: data.rows, pagination: pagination });
+    }
+    catch (error) { return next(error); }
+};
+const serverDetail = async function (req, res, next) {
+    try {
+        let serverType = req.query.serverType;
+        let parent_with_child = req.query.parent_with_child;
+        let condition = [];
+        let findQuery = { where: { deletedAt: null, } };
+        //--//
+        if (serverType == 'iOS') {
+            findQuery.where['platform'] = serverType;
+        }
+        if (serverType == '1') {
+            findQuery.where['is_recommended'] = serverType;
+        }
+        if(parent_with_child == '1'){
+            findQuery.where['parent_id'] = parent_with_child;
+            findQuery.include = [{
+                model: sequelize.models.v2rayServersDetails,
+                as: 'v2rayServersDetails_',  // Assuming you have 'children' as the association alias
+            }];
+        }
+        findQuery.where[Op.and] = condition;
+        let pagination = new Pagination(req, findQuery);
+        findQuery.order = [["id", "DESC"]];
+        //--//
+        let instance = new sequelize.db(sequelize.models.v2rayServersDetails);
+        let [data, err] = await instance.findAndCountAll(findQuery);
+        if (err) { return next(err); };
+        //--//
+        pagination.setCount(data.count);
+        return next({ v2rayServer: data.rows, pagination: pagination });
+    }
+    catch (error) { return next(error); }
+};
 //--//
 module.exports = {
     login,
@@ -165,5 +216,7 @@ module.exports = {
     //--//
     findAll,
     update,
-    deleteAccount
+    deleteAccount,
+    filterByType,
+    serverDetail
 };
