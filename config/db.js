@@ -1,6 +1,6 @@
 let server = require("./server");
 let config = {
-    port: 3306,
+    port: 3307,
     secret: 'secretString',
     dialect: "mysql",
     showErrors: true,
@@ -19,8 +19,8 @@ let config = {
 if(server.host === server.hosts.localhost){
     config.name = "vpndb";
     config.user = "root";
-    config.pass = "";
-    config.host = "127.0.0.1";
+    config.pass = "root";
+    config.host = "localhost";
 }
 else if(server.host === server.hosts.develop){
     config.name = "guiderte_db";

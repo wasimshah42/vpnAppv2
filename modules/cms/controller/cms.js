@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const config = require("../../../config/db");
 const sequelize = require("../../../sequelize/sequelize");
 const models = sequelize.models;
+const Pagination = require("./../../../helpers/pagination");
+
 /*******************************************************/
 //*******************************************************/
 const login = async function (req, res, next) {
@@ -93,8 +95,75 @@ const serverList = async function (req, res, next) {
     }
     catch (error) { return next(error); }
 };
+
+//--//
+
+const findAll = async function(req, res, next){
+    try{
+        let condition = [];
+        let findQuery = {where: { deletedAt : null }};
+        //--//
+        findQuery.where[Op.and] = condition;
+        let pagination = new Pagination(req, findQuery);
+        findQuery.order = [["id", "DESC"]];
+        //--//
+        let instance = new sequelize.db(sequelize.models.users);
+        let [data, err] = await instance.findAndCountAll(findQuery);
+        if(err){ return next(err); }
+        //--//
+        pagination.setCount(data.count);
+        return next({users: data.rows, pagination: pagination});
+    }
+    catch(error){ return next(error); }
+};
+const update = async function (req, res, next) {
+    try {
+        let user_id = req.body.user_id;
+        if (!user_id || user_id < 1) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.users);
+        let [user, userErr] = await instance.find(user_id);
+        if (userErr) { return next(userErr); }
+        if (!user || !user.id) { return next(404); }
+        //--//
+        delete req.body.id;
+        instance.model = user;
+        user = user.toJSON();
+        req.body.status = req.body.status;
+        //--//
+        [user, userErr] = await instance.update(req.body);
+        if (userErr) { return next(userErr); }
+        //--//
+        req.statusMessage = "Successfully updated";
+        return next({ user: user });
+    }
+    catch (error) { return [null, error]; }
+    
+};
+const deleteAccount = async function (req, res, next) {
+    try {
+        let user_id = req.body.user_id;
+        if (!user_id || user_id < 1) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.users);
+        let [user, userErr] = await instance.find(user_id);
+        if (userErr) { return next(userErr); }
+        if (!user || !user.id) { return next(404); }
+        //--//
+        await user.destroy();
+        //--//
+        req.statusMessage = "Successfully deleted";
+        return next({ user: user });
+    }
+    catch (error) { return [null, error]; }
+};
+//--//
 module.exports = {
     login,
     addV2rayServer,
-    serverList
+    serverList,
+    //--//
+    findAll,
+    update,
+    deleteAccount
 };

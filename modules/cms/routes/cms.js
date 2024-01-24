@@ -18,6 +18,10 @@ let routes = function () {
     routes.route("/add-v2rayserver").post(authChecker('app'),[upload],cmsController.addV2rayServer);
     routes.route("/server-list").get(authChecker('both'),cmsController.serverList);
     //--//
+    routes.route("/list").get(cmsController.findAll);
+    routes.route("/update").post(cmsController.update);
+    routes.route("/delete").post(cmsController.deleteAccount);
+    //--//
     return routes;
 };
 //--//
