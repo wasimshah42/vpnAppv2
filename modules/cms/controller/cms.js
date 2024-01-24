@@ -212,7 +212,7 @@ const serverDetail = async function (req, res, next) {
 const defaults = async function (req, res, next) {
     try {
         let type = req.body.type;
-        if(!type  || type == "" ) {req.statusMessage ="Defaults Type iis requiired"; return  next(404)  };
+        if(!type  || type == "" ) {req.statusMessage ="Defaults Type is requiired"; return  next(404)  };
         let condition = [];
         let findQuery = { where: { type: type } };
         //--//
@@ -254,7 +254,7 @@ const updateDefault = async function (req, res, next) {
 const defaultData = async function (req, res, next) {
     try {
         let type = req.body.type;
-        if(!type  || type == "" ) {req.statusMessage ="Defaults Type iis requiired"; return  next(404)  };
+        if(!type  || type == "" ) {req.statusMessage ="Defaults Type is requiired"; return  next(404)  };
         let condition = [];
         let findQuery = { where: { type: type } };
         //--//
