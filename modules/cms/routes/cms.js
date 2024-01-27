@@ -30,8 +30,13 @@ let routes = function () {
     //-default_data setting-//
     routes.route("/default-data").get(cmsController.defaultData);
     routes.route("/update-default-data").post(cmsController.updateDefaultData);
-    //-
-
+    //-Planing center CRUD-//
+    routes.route("/plan").post(cmsController.addPlan)
+    routes.route("/plan-list").get(cmsController.planList);
+    routes.route("/update-plan").post(cmsController.updatePlan);
+    routes.route("/delete-plan").post(cmsController.deletePlan);
+    
+    //--//
     return routes;
 };
 //--//

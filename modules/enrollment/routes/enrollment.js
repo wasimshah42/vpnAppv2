@@ -1,5 +1,7 @@
 const express = require("express");
 const enrollmentController = require("../controller/enrollmentController");
+const cmsController = require("../../cms/controller/cms");
+
 // const parser = require("../../../middleware/request_parser");
 const authChecker = require("../../../middleware/auth_checker");
 const enrollmentValidation = require("../validation/enrollment");
@@ -45,7 +47,11 @@ let routes = function () {
     routes.route("/referral-list").get(authChecker('both'),enrollmentController.referralList);
     routes.route("/discount-codes").get(authChecker('both'),enrollmentController.discountCodes);
     routes.route("/add-ios-file").post([upload],enrollmentController.addiOSFile);
-
+    //--//
+    routes.route("/plan-list").get(cmsController.planList);
+    //--//
+    routes.route("/user-participation").post(enrollmentController.addUserParticipation);
+    routes.route("/user-task").post(enrollmentController.userTask);
     //--//
     return routes;
 };

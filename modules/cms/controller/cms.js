@@ -293,6 +293,64 @@ const updateDefaultData = async function (req, res, next) {
 
 };
 //--//
+const addPlan = async function (req, res, next) {
+    try {
+        let plaining_center = new sequelize.db(models.plaining_center);
+        let [plaining, error] = await plaining_center.create(req.body);
+        if (error) { return next(error); }
+        return next({plan: plaining});
+    }
+    catch (error) { return next(error); }
+};
+const planList = async function (req, res, next) {
+    try {
+        let plaining_center = new sequelize.db(models.plaining_center);
+        let [plans, Rerror] = await plaining_center.findAll({ where: { deleted_at: null } });
+        return next(plans);
+    }
+    catch (error) { return next(error); }
+};
+const updatePlan = async function (req, res, next) {
+    try {
+        let id = req.body.id;
+        if (!id || id < 0) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.plaining_center);
+        let [plans, plansErr] = await instance.findOne({ id: id });
+        if (plansErr) { return next(plansErr); }
+        if (!plans || !plans.id) { return next(404); }
+        //--//
+        delete req.body.id;
+        instance.model = plans;
+        plans = plans.toJSON();
+        //--//
+        [plans, plansErr] = await instance.update(req.body);
+        if (plansErr) { return next(plansErr); }
+        //--//
+        req.statusMessage = "Successfully updated";
+        return next({ plans: plans });
+    }
+    catch (error) { return [null, error]; }
+
+};
+const deletePlan = async function (req, res, next) {
+    try {
+        let id = req.body.id;
+        if (!id || id < 1) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.plaining_center);
+        let [plan, planErr] = await instance.find(id);
+        if (planErr) { return next(planErr); }
+        if (!plan || !plan.id) { return next(404); }
+        //--//
+        await plan.destroy();
+        //--//
+        req.statusMessage = "Successfully deleted";
+        return next({ plan: plan });
+    }
+    catch (error) { return [null, error]; }
+};
+//--//
 module.exports = {
     login,
     addV2rayServer,
@@ -306,5 +364,9 @@ module.exports = {
     updateDefault,
     defaults,
     defaultData,
-    updateDefaultData
+    updateDefaultData,
+    addPlan,
+    planList,
+    updatePlan,
+    deletePlan
 };

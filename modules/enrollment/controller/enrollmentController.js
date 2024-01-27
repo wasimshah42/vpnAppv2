@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, useInflection } = require('sequelize');
 const { Op ,literal } = require("sequelize");
 const crypto = require("crypto");
 // const argon2 = require('argon2');
@@ -1428,6 +1428,40 @@ const addiOSFile = async function (req, res, next) {
     }
     catch (error) { return next(error); }
 };
+const addUserParticipation = async function (req, res, next) {
+    try {
+        let userInstance = new sequelize.db(models.users_participation);
+        let [user, userError] = await userInstance.findOne({ where : { user_id: req.body.user_id,planing_id: req.body.planing_id }, });
+        if(user){ req.statusMessage = "Your participation request already sent."; return next(404) }
+        let userParticipationInstance = new sequelize.db(models.users_participation);
+        let [userParticipation, error] = await userParticipationInstance.create(req.body);
+        if (error) { 
+            return next(error);
+        }
+         const result = await sendEmail(
+                req.body.email,
+                `Hello from VPN`,
+                `<p>You're successfullt participated:</p> <br> <strong></strong>`,
+              );
+            console.log('Email sent successfully:', result.response);
+        return next({ userParticipation });
+    } catch (error) {
+        return next(error);
+    }
+};
+
+const userTask = async function (req, res, next) {
+    try {
+        let userTaskInstance = new sequelize.db(models.users_tasks);
+        let [userTask, error] = await userTaskInstance.create(req.body);
+        if (error) { 
+            return next(error);
+        }
+        return next({ userTask });
+    } catch (error) {
+        return next(error);
+    }
+};
 module.exports = {
     login,
     createUser,
@@ -1457,7 +1491,9 @@ module.exports = {
     resetPassword,
     referralList,
     discountCodes,
-    addiOSFile
+    addiOSFile,
+    addUserParticipation,
+    userTask
 };
 
 async function checkIPQuality(ip) {
