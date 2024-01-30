@@ -110,7 +110,31 @@ const serverUpdate = async function (req, res, next) {
         instance.model = v2rayServersDetails;
         v2rayServersDetails = v2rayServersDetails.toJSON();
         //--//
-        [v2rayServersDetails, v2rayServersDetailsErr] = await instance.update(req.body);
+        let platform = req.body.platform;
+        if (req.body.platform) {
+            platform = platform;
+        } else {
+            platform = 'all';
+        }
+        //-----------//
+        const data = {
+            server_flag: req.files[0].filename,
+            file: req.files[1].filename,
+            uid: req.body.uid,
+            platform: platform,
+            is_recommended: req.body.recommended,
+            server_name: req.body.serverName,
+            server_address: req.body.serverAddress,
+            server_port: req.body.serverPort,
+            alter_id: req.body.alterId,
+            network_security: req.body.networkSecurity,
+            encryption_methods: req.body.encryption_methods,
+            network: req.body.network,
+            host: req.body.host,
+            path: req.body.path,
+            enable_udp: req.body.enableUDP,
+        };
+        [v2rayServersDetails, v2rayServersDetailsErr] = await instance.update(data);
         if (v2rayServersDetailsErr) { return next(v2rayServersDetailsErr); }
         //--//
         req.statusMessage = "Successfully updated";

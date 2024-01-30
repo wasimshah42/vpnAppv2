@@ -17,8 +17,8 @@ let routes = function () {
     routes.route("/login").post(cmsController.login);
     routes.route("/add-v2rayserver").post(authChecker('app'),[upload],cmsController.addV2rayServer);
     routes.route("/server-list").get(authChecker('both'),cmsController.serverList);
-    routes.route("/server-update").get(authChecker('app'),[upload],cmsController.serverUpdate);
-    routes.route("/server-delete").get(authChecker('app'),cmsController.serverDelete);
+    routes.route("/server-update").post(authChecker('app'),[upload],cmsController.serverUpdate);
+    routes.route("/server-delete").post(authChecker('app'),cmsController.serverDelete);
     //--//
     routes.route("/list").get(cmsController.findAll);
     routes.route("/update").post(cmsController.update);
