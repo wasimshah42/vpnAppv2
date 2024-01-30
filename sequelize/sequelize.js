@@ -26,6 +26,7 @@ let models = {
     plaining_center: (require("../schemas/plaining_center"))(connection, sequelize),
     users_participation: (require("../schemas/users_participation"))(connection, sequelize),
     users_tasks: (require("../schemas/users_tasks"))(connection, sequelize),
+    packages: (require("../schemas/packages"))(connection, sequelize),
     
 };
 //--//

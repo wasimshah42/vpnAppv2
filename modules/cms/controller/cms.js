@@ -95,6 +95,47 @@ const serverList = async function (req, res, next) {
     }
     catch (error) { return next(error); }
 };
+const serverUpdate = async function (req, res, next) {
+    try {
+        let id = req.body.id;
+        if (!id || id < 0) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.v2rayServersDetails);
+        let [v2rayServersDetails, v2rayServersDetailsErr] = await instance.findOne({ id: id });
+        // console.log('v2rayServersDetails', v2rayServersDetails);
+        if (v2rayServersDetailsErr) { return next(v2rayServersDetailsErr); }
+        if (!v2rayServersDetails || !v2rayServersDetails.id) { return next(404); }
+        //--//
+        delete req.body.id;
+        instance.model = v2rayServersDetails;
+        v2rayServersDetails = v2rayServersDetails.toJSON();
+        //--//
+        [v2rayServersDetails, v2rayServersDetailsErr] = await instance.update(req.body);
+        if (v2rayServersDetailsErr) { return next(v2rayServersDetailsErr); }
+        //--//
+        req.statusMessage = "Successfully updated";
+        return next({ v2rayServersDetails: v2rayServersDetails });
+    }
+    catch (error) { return [null, error]; }
+
+};
+const serverDelete = async function (req, res, next) {
+    try {
+        let id = req.body.id;
+        if (!id || id < 1) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.v2rayServersDetails);
+        let [v2rayServersDetails, v2rayServersDetailsErr] = await instance.find(id);
+        if (v2rayServersDetailsErr) { return next(v2rayServersDetailsErr); }
+        if (!v2rayServersDetails || !v2rayServersDetails.id) { return next(404); }
+        //--//
+        await v2rayServersDetails.destroy();
+        //--//
+        req.statusMessage = "Successfully deleted";
+        return next({ v2rayServersDetails: v2rayServersDetails });
+    }
+    catch (error) { return [null, error]; }
+};
 //--//
 const findAll = async function (req, res, next) {
     try {
@@ -350,6 +391,66 @@ const deletePlan = async function (req, res, next) {
     }
     catch (error) { return [null, error]; }
 };
+//--- Packages CRUD ---//
+const addPackages = async function (req, res, next) {
+    try {
+        let packages = new sequelize.db(models.packages);
+        let [package, error] = await packages.create(req.body);
+        if (error) { return next(error); }
+        return next({package: package});
+    }
+    catch (error) { return next(error); }
+};
+const packagesList = async function (req, res, next) {
+    try {
+        let packages = new sequelize.db(models.packages);
+        let [package, Rerror] = await packages.findAll({ where: { deleted_at: null } });
+        return next(package);
+    }
+    catch (error) { return next(error); }
+};
+const updatePackage = async function (req, res, next) {
+    try {
+        let id = req.body.id;
+        if (!id || id < 0) { return next(412); }
+        //--//
+        console.log('id', typeof id);
+        let instance = new sequelize.db(sequelize.models.packages);
+        let [package, packageErr] = await instance.findOne({ id: id });
+        // console.log('package', package);
+        if (packageErr) { return next(packageErr); }
+        if (!package || !package.id) { return next(404); }
+        //--//
+        delete req.body.id;
+        instance.model = package;
+        package = package.toJSON();
+        //--//
+        [package, packageErr] = await instance.update(req.body);
+        if (packageErr) { return next(packageErr); }
+        //--//
+        req.statusMessage = "Successfully updated";
+        return next({ package: package });
+    }
+    catch (error) { return [null, error]; }
+
+};
+const deletePackage = async function (req, res, next) {
+    try {
+        let id = req.body.id;
+        if (!id || id < 1) { return next(412); }
+        //--//
+        let instance = new sequelize.db(sequelize.models.packages);
+        let [package, packageErr] = await instance.find(id);
+        if (packageErr) { return next(packageErr); }
+        if (!package || !package.id) { return next(404); }
+        //--//
+        await package.destroy();
+        //--//
+        req.statusMessage = "Successfully deleted";
+        return next({ package: package });
+    }
+    catch (error) { return [null, error]; }
+};
 //--//
 module.exports = {
     login,
@@ -368,5 +469,13 @@ module.exports = {
     addPlan,
     planList,
     updatePlan,
-    deletePlan
+    deletePlan,
+    //--//
+    addPackages,
+    packagesList,
+    updatePackage,
+    deletePackage,
+    //--//
+    serverDelete,
+    serverUpdate
 };

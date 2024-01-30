@@ -12,6 +12,17 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
             defaultValue: null
         },
+        device_type: {
+            type: DataTypes.ENUM,
+            values: ['android','ios'],
+            allowNull: true,
+            defaultValue: 'android',
+          },
+          product_id:{
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
+          },
         user_type_versions: {
             type: DataTypes.INTEGER,
             allowNull: true,
