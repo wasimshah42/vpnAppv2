@@ -4,7 +4,7 @@ let hosts = {
     production: "production"
 };
 let config = {
-    port: 5000,
+    port: 5005,
     host: null,
     hosts: hosts,
     // logging: true

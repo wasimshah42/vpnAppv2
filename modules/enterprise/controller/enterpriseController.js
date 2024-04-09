@@ -202,16 +202,16 @@ const withdrawHistory = async function (req, res, next) {
         //-----recommended---//
         let findQueryR = {
             where: {
-                enterprise_user_id: id,
+                type: 'Withdrawn',
                 deleted_at: null
             }
         }
-        let companyInstanceR = new sequelize.db(models.enterprise_companies);
-        let [company, Rerror] = await companyInstanceR.findAll(findQueryR);
-        if(!company){
+        let entListInstanceR = new sequelize.db(models.enterprise_users_transactions);
+        let [list, Rerror] = await entListInstanceR.findAll(findQueryR);
+        if(!list){
             return next(404);
         }
-        return next(company); 
+        return next(list); 
     }
     catch (error) { return next(error); }
 };

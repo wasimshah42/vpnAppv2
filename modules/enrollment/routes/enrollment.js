@@ -45,6 +45,12 @@ let routes = function () {
     routes.route("/referral-list").get(authChecker('both'),enrollmentController.referralList);
     routes.route("/discount-codes").get(authChecker('both'),enrollmentController.discountCodes);
     routes.route("/add-ios-file").post([upload],enrollmentController.addiOSFile);
+    routes.route("/discount-codes").get(authChecker('both'),enrollmentController.discountCodes);
+    routes.route("/user-subscription-success").get(authChecker('both'),enrollmentController.userSubscriptionSuccess);
+    routes.route("/order-history").get(authChecker('both'),enrollmentController.orderHistory);
+    routes.route("/paymentudt").post(enrollmentController.paymentUDT)
+    routes.route("/payment-alipay").post(enrollmentController.paymentAliPay)
+    routes.route("/payment-alipay-notify").post(enrollmentController.paymentAliPayNotify)
 
     //--//
     return routes;

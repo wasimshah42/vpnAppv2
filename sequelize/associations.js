@@ -30,4 +30,14 @@ module.exports = function (db) {
         as: "packages",
         foreignKey: 'user_type_versions'
     }); 
+    db.user_subscription.belongsTo(db.packages, {
+        required: false,
+        as: "packages",
+        foreignKey: 'package_id'
+    });
+    db.packages.hasMany(db.user_subscription, {
+        required: false,
+        as: "user_subscription",
+        foreignKey: 'package_id'
+    }); 
 };

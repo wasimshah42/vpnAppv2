@@ -31,10 +31,13 @@ const alipaySdk = new AlipaySdk({
     timeout: 5000,
     camelcase: true
 });
+
 const urlencode = require('urlencode');
+
 const privateKeyPath = './rsa_private_key.pem'; // Update with your private key file path
 const publicKeyPath = './rsa_public_key.pem'; // Update with your public key file path
 const SignatureTool = require('../../../utils/signatureTool');
+
 /*******************************************************/
 const generateAccessToken = function (length) {
     length = parseInt(length) || 40;
@@ -51,6 +54,7 @@ function calculateMinutesBetweenDates(date1, date2) {
   
     return minutesDifference;
   }
+
   const login = async function (req, res, next) {
     try {
         let verificationCode = Math.floor(Math.random() * (9999 - 1000) + 1000);
@@ -565,6 +569,7 @@ const verifyReferalCode = async(req, res, next) => {
         return next(error)
     }
 }; 
+
 const logout = async (req, res, next) => {
     try {
         let token = req.headers.authentication;
@@ -740,6 +745,7 @@ const userDetails = async(req, res, next) => {
         return next(error)
     }
 };
+
 const checkSubscription = async(req, res, next) => {
     try{
         let receipt = req.body.receipt;
@@ -910,6 +916,7 @@ const stripePayment = async function (req, res, next) {
         return next(error);
     }
 };
+
 const fetchPackages = async function (req, res, next) {
     try {
         let user_type = req.query.user_type;
@@ -1129,6 +1136,7 @@ const remainingFreeTrial = async (req, res, next) => {
         sendResponse.error(error, next, res);
     }
 };
+
 const usdTPayment = async function(req, res, next) {
     try {
         let package_id = req.body.package_id;
@@ -1315,6 +1323,7 @@ function addMonthsToDate(startDate, monthsToAdd) {
   endDate.setMonth(startDate.getMonth() + monthsToAdd);
   return endDate;
 }
+
 const adsDetails = async function (req, res, next) {
     try {
         let user_id = req.user_id;
@@ -1536,6 +1545,7 @@ const orderHistory = async function (req, res, next) {
     }
     catch (error) { return next(error); }
 };
+
 const paymentUDT = async function (req, res, next) {
     try {
 
@@ -1610,11 +1620,20 @@ axios.post(apiUrl, data, { headers })
     }
     catch (error) { return next(error); }
 };
+
 const paymentAliPay = async function (req, res, next) {
     try {
 
         const privateKey = "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCxh32m3yHl9vz7yFT6M3f2Vpm2jKeXKGn72JuFFdNOGXIcVSbzHy6mKTM8hKRupPVUCPt3ULsqsnkDQo9SSw5T2w5+q9mKDeQMjCIPazMck9GB/Cop/IRMKPMyJPBenAg6Hc1cViLxVy2CikpnuvDLvqNL8At3vejcTPw8fOwNuA5WGkLVcXifZHPYGCfIJVArzZKPKRSBiMe1grRjfutNLRBfNIysVxH14g9JRpXz/jMKoIVEU6D/VLLUkCv5W3Yvsyiucx3M5KdbhlqVBSAWjO/Kk8xttImUmXVSIjMG1YrnAuFGZdwCTQlrLPDTHj1jQZiu+ASxcpqlRsF/qoIxAgMBAAECggEAKybd+gPev4EruR/W2AJOtIgUUPUbf3iJWngqRU0q0Z8Jx61DDHGV6zm0hI9RULu0DjsotLXg6N384Df7kmtADk3+1fd7pzz9I7ekR88s21Nq54ed0BrbJZAGnTexXa3bqhS4aCtfzv37x/FJaLFd+ohaNQkiIHb+9R2ZajKLRkIATKLzjJteyAduEeQbytYe0xxlT1i9f9eRN7353HGMdJi5kh8cNmBNBOY/ZTiZVpD4JspllJb2TCOOJqvht1uxOpBddws/Jp8eAFiEqF9PH1OguZIL8+e+tVb4YZ+FYY8C03kOyVe6BSgX5JmAcT7ijX2nmtPp0EzeE+gG3nnvYQKBgQD0h4UtwJNoxo75rAOlgUBDxt5w6J5Nnl4JzyJpk5P4Q304+CkbWMjRIi/Ik14ej84b7P0hLHyAqZ5yxYyDRonD777DhCZaGbVbJ/EdVm81wCKiTaXymIXoXxJ3NgP/SSz2cjxvOUEjo6dHGr4m5TbluTspVkWAnMBxifGpuLyN7QKBgQC522LoacSmBIJ02QahFagdgWQd1Hhg/gT1pJCrlLEtoLqS3XjP0/s4OeIYwg6sLf5r6BVKlvraN+uAqFtM2lRWpRuS+aCl+NRD8zJsQHuBAKbrR3eETq20L8+7NzbOQW3Bo1lKtG1WCZHIaObI/DeRk1SdjpKfRLP8jCTvC/yc1QKBgBCxd7wJ24ZZl8UfoxgXXMXDu8fFeZke6JiO1XCTrJRUNyY+er/tLbhpNw3gUZqQgqeRZC5xlQZLjg+TwOXtWNZRdZpvWRbpjmHsth8kmW738OVXm66WDv4wD1ioDVnOKw2f+tQ0+mducqr9/mE1YKwKGynVQ+VlzhVyL1dAz055AoGAHdEWcxbU15WNoFVY/OrOh71EZIy7q0PVY9s84mn+asWIaRti0GS/vut6XGJ1nCXc1U7sa4UBRZUHESLxUskMEsJ2RAQMQ9RBqY0Qn9FQfwetv709bVp5/5hUCUL4ZeqVQyWDo7qCd/UdEDvUGpZsC8zJHGXNHAQXpAKPwlH3+ukCgYB6g0C7fiv+T/aODL5s0gC7JfSR2qS65Zb+3zNEHqJJx6yRB3i98STvrEfhbprLplq0M2vX7eD4fi1JxsviIL8LINjSusFvtADtG8BD/mus63Av9rjo93+TTNOg7oRwtzT153CrJ1F6fsoIAx2oDB1OXigjLgJXu0MuK+Z3Yv9MZQ==";
         const publicKeyAli = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhDPNcKey50wf3uidtV+e8l8G6e20rweCrvjPwJVZRgSCyb1/Zh1vGAe+xAyh9eWJD453u2+GbLLNkgZMtkt1Xz1rwY+Zx1PpeOzNa7Pzm+AdkiQ6lm4po0wS7IjaQQ5P4ooCQquEmvC+teMdJ8cVb3eLbzKrZ7ghQm4sZWT/3IbPvSLWlL+31wDrKrmyDl9UngyKkji3X5dT92a2a31hJCEXCjCBQ+A1wh0oN9W+b70pyqJQ8gDxPU9O1UfXuova62wyirqOXCpztYU15yjMlvTncWXekX5F/PD7Pk2qXL3il93ClQLnL5N78fmxQKczObLyrHlFtUxGHZfMtGpj/QIDAQAB";
+        
+        // const contentAli = "We are such stuff as dreams are made on, and our little life is rounded with a sleep";
+        
+        // const signatureAli = signContentNew(contentAli, base64KeyToPEMNew(privateKey, "PRIVATE"), "utf8");
+        
+        // console.log("Signature:", signatureAli);
+        // console.log("Verify signature:", verifySignatureNew(contentAli, base64KeyToPEMNew(publicKeyAli, "PUBLIC"), signatureAli, "utf8"));
+        
 
         const httpMethod = 'POST';
         const httpUri = '/ams/api/v1/payments/pay';
@@ -1631,12 +1650,305 @@ const paymentAliPay = async function (req, res, next) {
             }
         };
         
-    
+        // Construct the content to be signed
+        const contentAli = constructContentToBeSigned(httpMethod, httpUri, clientId, requestBody, requestTime);
+        
+        const signatureAli = signContentNew(contentAli, base64KeyToPEMNew(privateKey, "PRIVATE"), "utf8");
+        
+        console.log("Signature:", signatureAli);
+        console.log("Verify signature:", verifySignatureNew(contentAli, base64KeyToPEMNew(publicKeyAli, "PUBLIC"), signatureAli, "utf8"));
+        
+//         console.log(contentToBeSigned);
+        try {
+            const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+            
+            const signer = crypto.createSign('RSA-SHA256');
+            signer.update(contentAli);
+            
+            const signature = signer.sign(privateKey, 'base64');
+            
+            console.log("Signature:", signature);
+            const headers = {
+                'signature': 'algorithm=RSA256, keyVersion=1, signature='+signature,
+                'Content-Type': 'application/json; charset=UTF-8',
+                'client-id': clientId,
+                'request-time': '1685599933871'
+              };
+              let data = {
+                "env": {
+                  "terminalType": "WEB"
+                },
+                "order": {
+                  "merchant": {
+                    "referenceMerchantId": "SM_001"
+                  },
+                  "orderAmount": {
+                    "currency": "CNY",
+                    "value": "1314"
+                  },
+                  "orderDescription": "Cappuccino #grande (Mika's coffee shop)",
+                  "referenceOrderId": "ORDER_04064611172949XXXX"
+                },
+                "paymentAmount": {
+                  "currency": "CNY",
+                  "value": "1314"
+                },
+                "paymentMethod": {
+                  "paymentMethodType": "ALIPAY_CN"
+                },
+                "paymentNotifyUrl": "https://www.gaga.com/notify",
+                "paymentRedirectUrl": "https://global.alipay.com/doc/cashierpayment/intro",
+                "paymentRequestId": "Y0RrWTtZCEnvvrhIdVIF0WgUFWSGByCstM1SMrYGaWikP1Pr96IGzlnuZ63EHIwe",
+                "productCode": "CASHIER_PAYMENT",
+                "settlementStrategy": {
+                  "settlementCurrency": "USD"
+                }
+              };
+              axios.post('https://open-na-global.alipay.com/ams/api/v1/payments/pay', data, { headers })
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+              
+        } catch (error) {
+            console.error("Error occurred:", error);
+            return next(error);
+        }
+return false;
+// Example usage
+// const privateKeyP = 'MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCEM81wp7LnTB/e6J21X57yXwbp7bSvB4Ku+M/AlVlGBILJvX9mHW8YB77EDKH15YkPjne7b4Zsss2SBky2S3VfPWvBj5nHU+l47M1rs/Ob4B2SJDqWbimjTBLsiNpBDk/iigJCq4Sa8L614x0nxxVvd4tvMqtnuCFCbixlZP/chs+9ItaUv7fXAOsqubIOX1SeDIqSOLdfl1P3ZrZrfWEkIRcKMIFD4DXCHSg31b5vvSnKolDyAPE9T07VR9e6i9rrbDKKuo5cKnO1hTXnKMyW9OdxZd6RfkX88Ps+TapcveKX3cKVAucvk3vx+bFApzM5svKseUW1TEYdl8y0amP9AgMBAAECggEAWRtFdJJD/qyLqsZlTlPWIY01bsUejP7l8aOY/DhuBMiTkwDb9usN70eBKElPfRsqZ8biIv8HvwpBjxQZ7qErynbuw3dT8ks3yZ7q0pZnM4A6zj8HEk/MVtm2w6F2YnUQGSRmY6OR7JEqKhSbmS0R4KDV5axkZbNxD4KNAAa0gmGIpb3cvp8qqwyY6PJLLxGMBeYNVNU4pbYyiXLAlFN4R9yiZrKZVtSmwA4ak6EyRaxjgtR97sxEr1hf/JYyC9Aefa57kOKik6P9gIRui/EualDqHJhrh8PBAvZWELxZ3aUfvmf8R5+43jhRjXUV1RPxlJoQwjuX9Kp1RAe+rtU2rQKBgQDoY54BxML0z11R+38sPn0z8UzGGOGGk0MkPCGaXC0vYKA3BTPUst1mvFzduXzqID1ta0HShOEJMxz8B1Y9nFG1ZmvhMpCqDBMXHq4q3I5yfWPK+Jq4NCNDziY/pjsa40NQYfQOEMw3HGwdKVzVdBpKir9r9O/Kg/cKNE3F3VDCawKBgQCRolo5/c/i66+zC9LHULdtN8HLZnBIKmOW0+749OdCavBNNuKnDXMjMNFL/Ah1mN7iMSoYBpdhqI+q/7+Sj5KQrXQIcSV8E0VmQ7wDVlDIe1y63l9GDYW0Wi4WwVPXkzdZHH1157/hHCikCLwuV4Z6XuVO2/QIxdB6s5m+eb+dNwKBgHsC+EnRYK178tcJvLir31SWf2BBHWhCHYFZvyPZdSWmDUjynQwTHjVasgHARQodxMZdxzrrkb9v6gDS1WjJjUrri2Fqhb8toxFS8TjJBTI/g4qWbDfjiWNEBWUd1h2WfTRYlXq4k5D8n5IUKgrnaV9Z8Jfx0NivYB5rr1t0mmI/AoGBAIui9YwhFtDnVuH/9ivx8s4f5gsWv5YSPscBkmLWv15pltsSQyQVu04EosmOcLYAy8Rpi4jZ2RBkRMyax57JVqiuB1GI234qJCK303AHtRFlZzYtvYA3uvmAdiyPVcqfdzRUIt+IQ+ydyUHutjBg76opjwib0VMQCKN9zW5a4iTlAoGAQt/P9LBKZRMge3HMXO4TeZyqIcGYKbBUXbWELlKNdAHjj3XTU0iXuQlmsJWqRg8JqTTQ7kI0sfZCGn9LS/GP+btmFOpOrOD9WSq7y99yFkq8pZ3qAeMQ6XsXFbbST196kAcSx/0fkJ5gsiGeEE+mrEH4pANElxDS4M+2VaKzBjk='; // Replace with your private key
+// const privateKey = `-----BEGIN PRIVATE KEY-----
+// MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkg2AzO7s1pzgRdpMXumuTKoZxl1IGNboW3CR/44xl+TuyOjhU5Z666C8GLLp7AZWBGogCu6li6MxdCYRXVO8lkR0rUVU5NGbJluTHNXePugVR7oGICvr9xLOrkpIWyW/dPpbbFLgb+y87L4lCgieBwTewpF1IGpQ3TKDl9U9x6eS6HEo77ujdZ0whxlJgKVGh1rg63doTOi6Tqn6SUQaveK0DwTgXiQA0crkCddhEVGcE80DtBjdiD1wywz0I7gwdMqC0unnKsyhcABfCLVdKJu2efCiR6DR5TPMwWQ+pHPY+CaNUy5cC5voUEKDmfzK234zxXH0Eil06EpQFyDfXQIDAQAB
+// -----END PRIVATE KEY-----`;
+
+// let privateKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkg2AzO7s1pzgRdpMXumuTKoZxl1IGNboW3CR/44xl+TuyOjhU5Z666C8GLLp7AZWBGogCu6li6MxdCYRXVO8lkR0rUVU5NGbJluTHNXePugVR7oGICvr9xLOrkpIWyW/dPpbbFLgb+y87L4lCgieBwTewpF1IGpQ3TKDl9U9x6eS6HEo77ujdZ0whxlJgKVGh1rg63doTOi6Tqn6SUQaveK0DwTgXiQA0crkCddhEVGcE80DtBjdiD1wywz0I7gwdMqC0unnKsyhcABfCLVdKJu2efCiR6DR5TPMwWQ+pHPY+CaNUy5cC5voUEKDmfzK234zxXH0Eil06EpQFyDfXQIDAQAB"
+const generatedSignature = generateSignaturerrrrrrrrrrrr(contentToBeSigned, privateKeyPath);
+
+console.log("generatedSignature",generatedSignature);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        return false;
+        const requestString = JSON.stringify(req.body);
+        // Generated private & public keys - configured in Alipay Developer Account
+        // const privateKey = configAlipay.privateKey;  // Replace with your private key
+        const publicKey = configAlipay.alipayPublicKey;   // Replace with your public key
+        
+        // Construct Signature Content
+        const clientID = configAlipay.appId;    // Replace with your Client ID
+        
+        const content = `POST /ams/sandbox/api/v1/payments/pay?_output_charset=utf-8&_input_charset=utf-8\n${clientID}.${new Date().toISOString()}.${requestString}`;
+        console.log("content--------------->",content);
+        
+        // Generate signature
+        const signature = signContent(content, base64KeyToPEM(privateKey, "PRIVATE"), "utf8");
+        console.log("Signature:", signature);
+        
+        // URL-Encode the signature
+        // Use the url-encoded signature for the Alipay Payment APIs
+        const url_encoded = encodeURIComponent(signature);
+        console.log("URL Encoded Signature:", url_encoded);
+        
+        // Verify the generated signature
+        // Use the generated signature without url encoding for verification
+        console.log("Verify signature:", verifySignature(content, base64KeyToPEM(publicKey, "PUBLIC"), signature, "utf8"));
+        // const signedRequest = { ...requestString, signature: url_encoded };
+        const requestBodyObject = JSON.parse(requestString); // Parse back to object
+const signedRequest = { ...requestBodyObject, signature: url_encoded };
+
+        // Make the payment request to Alipay API
+        axios.post(configAlipay.gatewayUrl, signedRequest)
+            .then(response => {
+                // Handle the response from Alipay
+                const responseData = response.data;
+                console.log("response",responseData)
+                    // Check if responseData is empty or undefined
+                    if (!responseData || responseData === "") {
+                        console.error("Response data is empty or undefined.");
+                        // Handle the error or exit the function
+                    } else {
+                        const responseContent = JSON.stringify(responseData);
+                        const isSignatureValid = verifySignature(responseContent, base64KeyToPEM(publicKey, "PUBLIC"), signature, "utf8");
+                    }
+
+                // if (isSignatureValid) {
+                //     console.log("Signature verification passed. Response is from Alipay.");
+                //     // Process the payment response
+                // } else {
+                //     console.log("Signature verification failed. Response may have been tampered with.");
+                //     // Handle potential security threat
+                // }
+            })
+            .catch(error => {
+                console.error("Error making payment request:", error);
+                // Handle error
+            });
+        
+
+        // const { totalAmount, subject, body } = req.body;
+        // let YOUR_ORDER_ID = Math.floor(Math.random() * (9999 - 1000) + 1000);
+        // // const formData = alipaySdk.buildFormData({
+        // //   subject,
+        // //   outTradeNo: YOUR_ORDER_ID, // Replace with your unique order ID
+        // //   totalAmount,
+        // //   body,
+        // // });
+        // const formData = {
+        //     subject,
+        //     outTradeNo: YOUR_ORDER_ID.toString(), // Replace with your unique order ID
+        //     totalAmount,
+        //     body,
+        // };
+        // console.log("formData----------",formData);
+        // let alipay = {
+        //     appId: configAlipay.appId,
+        //     privateKey: fs.readFileSync(privateKeyPath, 'utf8'),
+        //     alipayPublicKey: fs.readFileSync(publicKeyPath, 'utf8'),
+        //     gatewayUrl: configAlipay.gatewayUrl,
+        //     notifyUrl: configAlipay.notifyUrl,
+        //     encryptKey: configAlipay.encryptKey,
+        // }
+        // console.log("alipay",alipay);
+        // const alipayClient = new alipaySdk(alipay);
+        // const result = await alipayClient.pageExec('alipay.trade.page.pay', formData);
+        // // res.send(result);
+        // // const result = await alipaySdk.makeFormSubmitRequest(formData, alipay);
+        // console.log("result",result);
+        // res.json(result);
       } catch (err) {
         next(err);
       }
     
-};
+}; 
+function signContentNew(content, privateKey, encoding) {
+    const sign = crypto.createSign("SHA256");
+    sign.write(content, encoding);
+    sign.end();
+    return sign.sign(privateKey, "base64");
+}
+
+function verifySignatureNew(content, publicKey, signature, encoding) {
+    const verify = crypto.createVerify("SHA256");    
+    verify.write(content, encoding);
+    verify.end();
+    return verify.verify(publicKey, Buffer.from(signature, "base64"));
+}
+
+function base64KeyToPEMNew(base64Key, keyType) {
+    return [`-----BEGIN ${keyType} KEY-----`, ...splitStringIntoChunksNew(base64Key, 64), `-----END ${keyType} KEY-----`].join("\n");
+}
+
+function splitStringIntoChunksNew(input, chunkSize) {
+    const chunkCount = Math.ceil(input.length / chunkSize)
+    return Array.from( { length: chunkCount } ).map((v, chunkIndex) => input.substr(chunkIndex * chunkSize, chunkSize));
+}
+
+
+function formatDate(date) {
+    return new Date(date).toISOString();
+}
+
+// Function to construct content to be signed
+function constructContentToBeSigned(httpMethod, httpUri, clientId, requestBody, requestTime) {
+    const contentToBeSigned = `${httpMethod} ${httpUri}\n${clientId}.${formatDate(requestTime)}.${JSON.stringify(requestBody)}`;
+    return contentToBeSigned;
+}
+function generateSignaturerrrrrrrrrrrr(contentToBeSigned, privateKey) {
+    const sign = crypto.createSign('RSA-SHA256');
+    // Update the sign object with the content to be signed
+    sign.update(contentToBeSigned);
+    // Sign the content with the private key and return the signature
+    const signature = sign.sign(privateKey, 'base64');
+    // Encode the signature to URL-safe format
+    const urlSafeEncodedSignature = encodeURIComponent(signature)
+        .replace(/[!'()*]/g, (c) => {
+            return '%' + c.charCodeAt(0).toString(16);
+        })
+        .replace(/%20/g, '+')
+        .replace(/%3D/g, '=');
+    console.log("urlSafeEncodedSignature",urlSafeEncodedSignature)
+    return urlSafeEncodedSignature;
+}
+// function sign(httpMethod, path, clientId, reqTime, content, merchantPrivateKey) {
+//     const signContent = genSignContent(httpMethod, path, clientId, reqTime, content);
+//     const signValue = signWithSHA256RSA(signContent, merchantPrivateKey);
+//     return encodeURIComponent(signValue);
+// }
+
+// function verify(httpMethod, path, clientId, rspTime, rspBody, signature, alipayPublicKey) {
+//     const rspContent = genSignContent(httpMethod, path, clientId, rspTime, rspBody);
+//     return verifySignatureWithSHA256RSA(rspContent, signature, alipayPublicKey);
+// }
+
+// function genSignContent(httpMethod, path, clientId, timeString, content) {
+//     const payload = `${httpMethod} ${path}\n${clientId}.${timeString}.${content}`;
+//     return payload;
+// }
+
+// function signWithSHA256RSA(signContent, merchantPrivateKey) {
+//     const priKey = `-----BEGIN RSA PRIVATE KEY-----\n${merchantPrivateKey}\n-----END RSA PRIVATE KEY-----`;
+
+//     const sign = crypto.createSign('RSA-SHA256');
+//     sign.update(signContent);
+//     const signValue = sign.sign(priKey, 'base64');
+//     return signValue;
+// }
+
+// function verifySignatureWithSHA256RSA(rspContent, rspSignValue, alipayPublicKey) {
+//     const pubKey = `-----BEGIN PUBLIC KEY-----\n${alipayPublicKey}\n-----END PUBLIC KEY-----`;
+    
+//     const originalRspSignValue = Buffer.from(rspSignValue, 'base64');
+
+//     const verify = crypto.createVerify('RSA-SHA256');
+//     verify.update(rspContent);
+//     const verifyResult = verify.verify(pubKey, originalRspSignValue);
+//     return verifyResult;
+// }
+
+// function signContent(content, privateKey, encoding) {
+//     const sign = crypto.createSign("SHA256");
+//     sign.write(content, encoding);
+//     sign.end();
+//     return sign.sign(privateKey, "base64");
+// }
+
+// /** Function to verify the generated signature using a public key. */
+// function verifySignature(content, publicKey, signature, encoding) {
+//     const verify = crypto.createVerify("SHA256");
+//     verify.write(content, encoding);
+//     verify.end();
+//     return verify.verify(publicKey, Buffer.from(signature, "base64"));
+// }
+// function base64KeyToPEM(base64Key, keyType) {
+//     return [`-----BEGIN ${keyType} KEY-----`, ...splitStringIntoChunks(base64Key, 64), `-----END ${keyType} KEY-----`].join("\n");
+// }
+// /** Function to split a string into chunks used while creating the PEM format key. */
+// function splitStringIntoChunks(input, chunkSize) {
+//     const chunkCount = Math.ceil(input.length / chunkSize)
+//     return Array.from({ length: chunkCount }).map((v, chunkIndex) => input.substr(chunkIndex * chunkSize, chunkSize));
+// }
+
 const paymentAliPayNotify = async function (req, res, next) {
     try {
     const { signStatus, serialNo } = req.body;
@@ -1660,6 +1972,22 @@ const paymentAliPayNotify = async function (req, res, next) {
   }
 
 };
+// function generateSignatureT(data, apiKey) {
+//     // Convert data to JSON string
+//     const jsonData = JSON.stringify(data);
+  
+//     // Generate MD5 hash of base64 encoded data concatenated with API key
+//     const hash = crypto.createHash('md5')
+//                        .update(Buffer.from(jsonData, 'utf-8'))
+//                        .digest('base64');
+//     const sign = crypto.createHash('md5')
+//                        .update(Buffer.from(hash + apiKey, 'utf-8'))
+//                        .digest('hex');
+  
+//     return sign.toLowerCase(); // Convert the signature to lowercase
+//   }
+  
+  
 module.exports = {
     login,
     createUser,

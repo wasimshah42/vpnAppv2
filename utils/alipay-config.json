@@ -1,0 +1,8 @@
+{
+    "appId": "SANDBOX_5Y945A2Z9PTR03433",
+    "privateKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkg2AzO7s1pzgRdpMXumuTKoZxl1IGNboW3CR/44xl+TuyOjhU5Z666C8GLLp7AZWBGogCu6li6MxdCYRXVO8lkR0rUVU5NGbJluTHNXePugVR7oGICvr9xLOrkpIWyW/dPpbbFLgb+y87L4lCgieBwTewpF1IGpQ3TKDl9U9x6eS6HEo77ujdZ0whxlJgKVGh1rg63doTOi6Tqn6SUQaveK0DwTgXiQA0crkCddhEVGcE80DtBjdiD1wywz0I7gwdMqC0unnKsyhcABfCLVdKJu2efCiR6DR5TPMwWQ+pHPY+CaNUy5cC5voUEKDmfzK234zxXH0Eil06EpQFyDfXQIDAQAB",
+    "alipayPublicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhDPNcKey50wf3uidtV+e8l8G6e20rweCrvjPwJVZRgSCyb1/Zh1vGAe+xAyh9eWJD453u2+GbLLNkgZMtkt1Xz1rwY+Zx1PpeOzNa7Pzm+AdkiQ6lm4po0wS7IjaQQ5P4ooCQquEmvC+teMdJ8cVb3eLbzKrZ7ghQm4sZWT/3IbPvSLWlL+31wDrKrmyDl9UngyKkji3X5dT92a2a31hJCEXCjCBQ+A1wh0oN9W+b70pyqJQ8gDxPU9O1UfXuova62wyirqOXCpztYU15yjMlvTncWXekX5F/PD7Pk2qXL3il93ClQLnL5N78fmxQKczObLyrHlFtUxGHZfMtGpj/QIDAQAB",
+    "gatewayUrl": "https://open-sea-global.alipay.com",
+    "notifyUrl": "http:/localhost:5005/api/enrollment/payment-alipay-notify",
+    "encryptKey": "process.env.ALIPAY_ENCRYPT_KEY || 'YOUR_ENCRYPT_KEY'"
+}

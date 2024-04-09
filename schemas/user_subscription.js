@@ -23,6 +23,16 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
             defaultValue: null,
         },
+        device_type: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        subscription_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
         start_date: {
             type: DataTypes.DATE,
             allowNull: true,
@@ -32,6 +42,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DATE,
             allowNull: true,
             defaultValue: null
+        },
+        response: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
         },
         status: {
             type: DataTypes.BIGINT,

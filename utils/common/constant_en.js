@@ -4,6 +4,7 @@ const constants = {
     SAUDI_INCOME_LIMIT: 8000,
     NON_SAUDI_INCOME_LIMIT: 10000
 };
+
 module.exports = function (key) {
     return constants[key];
 };

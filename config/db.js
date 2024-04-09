@@ -19,7 +19,7 @@ let config = {
 if(server.host === server.hosts.localhost){
     config.name = "vpndb";
     config.user = "root";
-    config.pass = "";
+    config.pass = "1234";
     config.host = "127.0.0.1";
 }
 else if(server.host === server.hosts.develop){
